@@ -1,72 +1,85 @@
 package com.example.textSearchEngine.trie;
 
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by suryansh on 21/6/17.
  */
+@Component
 public class Trie {
     private TrieNode root;
 
+    /* Constructor */
     public Trie() {
-        root = new TrieNode();
+        root = new TrieNode(' ');
     }
 
-    // Inserts a word into the trie.
-    public void insert(String word) {
-        HashMap<Character, TrieNode> children = root.children;
-
-        for(int i=0; i<word.length(); i++){
-            char c = word.charAt(i);
-
-            TrieNode t;
-            if(children.containsKey(c)){
-                t = children.get(c);
-            }else{
-                t = new TrieNode(c);
-                children.put(c, t);
+    /* Function to insert word */
+    public void insert(String word, String fileName, Long lineNumber) {
+        if (search(word) == true)
+            return;
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            TrieNode child = current.subNode(ch);
+            if (child != null)
+                current = child;
+            else {
+                current.getChildList().add(new TrieNode(ch));
+                current = current.subNode(ch);
             }
-
-            children = t.children;
-
-            //set leaf node
-            if(i==word.length()-1)
-                t.isLeaf = true;
+            current.setCount(current.getCount() + 1);
         }
+        current.setEnd(true);
+        Map<String, List<Long>> fileNameToLineNumberMap = current.getFileNameToLineNumberMap();
+        if (fileNameToLineNumberMap.isEmpty()) {
+            fileNameToLineNumberMap = new HashMap<>();
+            fileNameToLineNumberMap.put(fileName, new ArrayList<>());
+        }
+        List<Long> pages = fileNameToLineNumberMap.get(fileName);
+        pages.add(lineNumber);
     }
 
-    // Returns if the word is in the trie.
+    /* Function to search for word */
     public boolean search(String word) {
-        TrieNode t = searchNode(word);
-
-        if(t != null && t.isLeaf)
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            if (current.subNode(ch) == null)
+                return false;
+            else
+                current = current.subNode(ch);
+        }
+        if (current.isEnd() == true)
             return true;
-        else
-            return false;
+        return false;
     }
 
-    // Returns if there is any word in the trie
-    // that starts with the given prefix.
-    public boolean startsWith(String prefix) {
-        if(searchNode(prefix) == null)
-            return false;
-        else
-            return true;
-    }
-
-    public TrieNode searchNode(String str){
-        Map<Character, TrieNode> children = root.children;
-        TrieNode t = null;
-        for(int i=0; i<str.length(); i++){
-            char c = str.charAt(i);
-            if(children.containsKey(c)){
-                t = children.get(c);
-                children = t.children;
-            }else{
-                return null;
+    /* Function to remove a word */
+    public void remove(String word, String fileName, String lineNumber) {
+        if (search(word) == false) {
+            System.out.println(word + " does not exist in trie\n");
+            return;
+        }
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            TrieNode child = current.subNode(ch);
+            if (child.getCount() == 1) {
+                current.getChildList().remove(child);
+                return;
+            } else {
+                child.setCount(child.getCount() - 1);
+                current = child;
             }
         }
-
-        return t;
+        current.setEnd(false);
+        Map<String, List<Long>> fileNameToLineNumberMap = current.getFileNameToLineNumberMap();
+        if (!fileNameToLineNumberMap.isEmpty()) {
+            List<Long> pages = fileNameToLineNumberMap.get(fileName);
+            pages.remove(lineNumber);
+        }
     }
 }
