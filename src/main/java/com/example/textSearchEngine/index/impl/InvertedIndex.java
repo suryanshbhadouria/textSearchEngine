@@ -1,5 +1,7 @@
-package com.example.textSearchEngine.index;
+package com.example.textSearchEngine.index.impl;
 
+import com.example.textSearchEngine.dto.response.SearchResponse;
+import com.example.textSearchEngine.index.IInvertedIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,8 +15,8 @@ import java.util.Map;
 /**
  * Created by suryansh on 22/6/17.
  */
-@Component
-public class InvertedIndex {
+@Component(value = "InvertedIndex")
+public class InvertedIndex implements IInvertedIndex {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private Map<String, Map<String, List<Long>>> tokenToDocumentNameToLineNumberMap;
@@ -24,16 +26,19 @@ public class InvertedIndex {
         tokenToDocumentNameToLineNumberMap = new HashMap<>();
     }
 
+    @Override
     public Map<String, Map<String, List<Long>>> getTokenToDocumentNameToLineNumberMap() {
         return tokenToDocumentNameToLineNumberMap;
     }
 
+    @Override
     public void setTokenToDocumentNameToLineNumberMap(Map<String, Map<String, List<Long>>> tokenToDocumentNameToLineNumberMap) {
         this.tokenToDocumentNameToLineNumberMap = tokenToDocumentNameToLineNumberMap;
     }
 
+    @Override
     public void addToken(String token, String documentName, Long lineNumber) {
-        if (tokenToDocumentNameToLineNumberMap != null && !tokenToDocumentNameToLineNumberMap.isEmpty()) {
+        if (tokenToDocumentNameToLineNumberMap != null) {
             if (!tokenToDocumentNameToLineNumberMap.containsKey(token)) {
                 tokenToDocumentNameToLineNumberMap.put(token, new HashMap<>());
             }
@@ -48,11 +53,12 @@ public class InvertedIndex {
                     documentToPageNumberMap.put(documentName, pages);
                 }
             } else {
-                LOG.info("Should not come here");
+                LOG.error("Should not come here");
             }
         }
     }
 
+    @Override
     public boolean removeToken(String token, String documentName) {
         boolean removed = false;
         if (tokenToDocumentNameToLineNumberMap != null && !tokenToDocumentNameToLineNumberMap.isEmpty()) {
