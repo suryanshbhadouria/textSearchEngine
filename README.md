@@ -30,5 +30,5 @@ Prerequisites-
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
   </dependency>
-3.If you want to use the version without mongo please checkout the branch dev-without-mongo and on the contrary checkout dev-with-mongo.
+3.If you want to use the version without mongo please checkout the branch dev-without-mongo-db and on the contrary checkout dev-with-mongo-db.
 4.
