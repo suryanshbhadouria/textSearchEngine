@@ -25,4 +25,10 @@ Prerequisites-
 
 #Running the project-
 1.The project has been exported as a jar.
-2.To export it as a war change the packaging to war in pom.xml.
+2.To export it as a war change the packaging to war in pom.xml and also exclude the dependency of apache tomcat from-
+ <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+  </dependency>
+3.If you want to use the version without mongo please checkout the branch dev-without-mongo and on the contrary checkout dev-with-mongo.
+4.
