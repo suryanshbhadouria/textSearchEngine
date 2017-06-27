@@ -25,7 +25,7 @@ public class FileReadServiceImpl implements IFileReadServive {
 
     @Override
     public List<String> getLinesFromFile(String fileName, List<Long> lineNumbers) {
-        LOG.info("Reading the file: {} to get relevant data on lineNumbers:{}", lineNumbers);
+        LOG.info("Reading the file: {} to get relevant data on lineNumbers:{}", fileName, lineNumbers);
         List<Long> linesList = deepCopy(lineNumbers);
         List<String> relevantLines = new ArrayList<>();
         File filesDir = new File(this.filesDir);

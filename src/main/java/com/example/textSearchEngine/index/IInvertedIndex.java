@@ -13,7 +13,13 @@ public interface IInvertedIndex {
 
     public void setTokenToDocumentNameToLineNumberMap(Map<String, Map<String, List<Long>>> tokenToDocumentNameToLineNumberMap);
 
+    Map<String, String> getTokenToDocumentEntityMap();
+
+    void setTokenToDocumentEntityMap(Map<String, String> tokenToDocumentEntityMap);
+
     public void addToken(String token, String documentName, Long lineNumber);
 
-    public boolean removeToken(String token, String documentName);
+    void removeFileContentFromIndex(String fileName);
+
+    void printCache();
 }

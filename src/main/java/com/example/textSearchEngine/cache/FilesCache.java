@@ -1,10 +1,13 @@
 package com.example.textSearchEngine.cache;
 
+import com.example.textSearchEngine.index.IInvertedIndex;
 import com.example.textSearchEngine.index.impl.InvertedIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -41,7 +44,7 @@ public class FilesCache {
     private boolean startup = true;
 
     @Autowired
-    private InvertedIndex index;
+    private IInvertedIndex index;
 
     public void loadInvertedIndex(List<String> filesToBeAdded, List<String> filesToBeRemoved) {
         if (!startup) {
@@ -77,14 +80,7 @@ public class FilesCache {
     }
 
     private void removeFileContentFromIndex(String fileName) {
-        Map<String, Map<String, List<Long>>> tokenToDocumentNameToLineNumberMap = index.getTokenToDocumentNameToLineNumberMap();
-        for (Map.Entry<String, Map<String, List<Long>>> entry : tokenToDocumentNameToLineNumberMap.entrySet()) {
-            Map<String, List<Long>> documentNameToPagesMap = entry.getValue();
-            if (documentNameToPagesMap != null && !documentNameToPagesMap.isEmpty()) {
-                if (documentNameToPagesMap.containsKey(fileName))
-                    documentNameToPagesMap.remove(fileName);
-            }
-        }
+        index.removeFileContentFromIndex(fileName);
     }
 
     public void readFileAndLoadContent(File file) {
@@ -131,6 +127,13 @@ public class FilesCache {
                             index.addToken(word, file.getName(), i);
                         }
                     }
+                } else {
+                    words = line.split(" ");
+                    for (String word : words) {
+                        if (word.equals("\\s+") || word.length() == 0)
+                            continue;
+                        index.addToken(word, file.getName(), i);
+                    }
                 }
                 i++;
             }
@@ -139,6 +142,10 @@ public class FilesCache {
         }
     }
 
+
+    @Caching(evict = {
+            @CacheEvict("documentsFromMongo"),
+            @CacheEvict(value = "documentsInMemory")})
     public void reloadCache() {
         if (startup) {
             LOG.info("Loading the invertedIndex for the first time");
@@ -153,14 +160,7 @@ public class FilesCache {
     }
 
     public void printCache() {
-        Map<String, Map<String, List<Long>>> tokenToDocumentNameToLineNumberMap =
-                index.getTokenToDocumentNameToLineNumberMap();
-        for (Map.Entry<String, Map<String, List<Long>>> entry : tokenToDocumentNameToLineNumberMap.entrySet()) {
-            LOG.info("token is:{}", entry.getKey());
-            for (Map.Entry<String, List<Long>> entry1 : entry.getValue().entrySet()) {
-                LOG.info("Document is:{} and lines are:{}", entry1.getKey(), entry1.getValue());
-            }
-        }
+        index.printCache();
     }
 
     public boolean isReloadRequired() {
