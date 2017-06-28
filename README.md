@@ -1,5 +1,6 @@
 # textSearchEngine
-Prerequisites-
+
+#Prerequisites[Not Required on master branch]-
 1.Mongo Db should be up and running at 127.0.0.1:27017(to enable the use of mongo db as the underlying db set the property use.mongodb in applicatiion.properties to true).
 
 
@@ -13,7 +14,7 @@ Prerequisites-
 3.This particular project can read files in the format- date time:level:class-message
  There will be subtle code changes required to handle a separate format.
 
-4.There is mongo store added as well but the use of the same degrades performance exponentially.
+4.[Not on master branch]There is mongo store added as well but the use of the same degrades performance exponentially.
  The default version uses an in memory hashmap storing all the token and their corresponding files with line numbers.
  To activate the mongodb based store set the property use.mongodb in application.properties to true.
 
@@ -30,8 +31,8 @@ Prerequisites-
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
   </dependency>
-3.If you want to use the version without mongo please checkout the branch dev-without-mongo-db and on the contrary checkout dev-with-mongo-db.
+3.[IMPORTANT]If you want to use the version without mongo please checkout the master branch and on the contrary checkout dev-with-mongo-db.
 4.Update the property files.dir in application.properties to point to the local location of log files.
-4.To start the project as a jar use-
+5.To start the project as a jar use-
          mvn spring-boot:run -Dlog.path="path/to/textSearchEngine"
-5.The app runs on port 8080
+6.The app runs on port 8080
