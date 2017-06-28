@@ -23,6 +23,12 @@ public class FileReadServiceImpl implements IFileReadServive {
     @Value("${files.dir}")
     String filesDir;
 
+    /**
+     * @param fileName
+     * @param lineNumbers
+     * @return List<String>
+     * Retreiving given lines from file by parsing it sequentially
+     */
     @Override
     public List<String> getLinesFromFile(String fileName, List<Long> lineNumbers) {
         LOG.info("Reading the file: {} to get relevant data on lineNumbers:{}", lineNumbers);
@@ -55,6 +61,11 @@ public class FileReadServiceImpl implements IFileReadServive {
         return relevantLines;
     }
 
+    /**
+     * @param lineList
+     * @return List
+     * Returns a deepCopy of the list being sent as param
+     */
     private List<Long> deepCopy(List<Long> lineList) {
         List<Long> tempFilesList = new ArrayList<>();
         if (lineList != null) {

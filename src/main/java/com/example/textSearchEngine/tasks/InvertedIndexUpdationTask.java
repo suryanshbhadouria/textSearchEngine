@@ -24,13 +24,15 @@ public class InvertedIndexUpdationTask {
     @Autowired
     FilesCache filesCache;
 
+    /**
+     * Scheduled task running at fixed delay of 10 s and checcking if the inverted index nedds reloading and reloading the same if required
+     */
     @Scheduled(fixedDelay = 10000)
     public void reportCurrentTime() {
         Long startTime = System.currentTimeMillis();
         if (filesCache.isReloadRequired()) {
             filesCache.reloadCache();
             LOG.info("Time taken to reloadCache:{}", System.currentTimeMillis() - startTime);
-            filesCache.printCache();
         } else {
             LOG.info("Not reloading cache as file structure has not changed");
         }

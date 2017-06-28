@@ -28,7 +28,10 @@ public class FilesCache {
     @Value("${log.pattern}")
     private String logPattern;
 
-
+    /**
+     * Defines the pattern used for tekenisation
+     * It is defined in application.properties
+     */
     @Value("${use.pattern.based.tokenisation}")
     private Boolean usePatternBasedTokenisation;
 
@@ -43,6 +46,10 @@ public class FilesCache {
     @Autowired
     private InvertedIndex index;
 
+    /**
+     * @param filesToBeAdded
+     * @param filesToBeRemoved Responsible for updating the cache by removing the words present in filesToBeRemoved and adding the words present in filesToBeRemoved from the inverted Index
+     */
     public void loadInvertedIndex(List<String> filesToBeAdded, List<String> filesToBeRemoved) {
         if (!startup) {
             LOG.info("Loading the invertedIndex with data post startup with  files to be added {} and files to be removed:{}", filesToBeAdded, filesToBeRemoved);
@@ -76,6 +83,9 @@ public class FilesCache {
 
     }
 
+    /**
+     * @param fileName Responsible for updating the cache by removing the words present in file with name fileName
+     */
     private void removeFileContentFromIndex(String fileName) {
         Map<String, Map<String, List<Long>>> tokenToDocumentNameToLineNumberMap = index.getTokenToDocumentNameToLineNumberMap();
         for (Map.Entry<String, Map<String, List<Long>>> entry : tokenToDocumentNameToLineNumberMap.entrySet()) {
@@ -87,6 +97,10 @@ public class FilesCache {
         }
     }
 
+
+    /**
+     * @param file Responsible for updating the cache by adding the words present in file
+     */
     public void readFileAndLoadContent(File file) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
@@ -123,7 +137,6 @@ public class FilesCache {
                                 break;
                             case "message":
                                 words = line.replaceAll("[^a-zA-Z0-9_]", " ").split(" ");
-//                            line = splitLine[splitLine.length - 1];
                         }
                         for (String word : words) {
                             if (word.equals("\\s+") || word.length() == 0)
@@ -139,6 +152,9 @@ public class FilesCache {
         }
     }
 
+    /**
+     * Responsible for reloading the invertedIndex
+     */
     public void reloadCache() {
         if (startup) {
             LOG.info("Loading the invertedIndex for the first time");
@@ -163,6 +179,11 @@ public class FilesCache {
         }
     }
 
+    /**
+     * Checks if reloading of the invertedIndex is required based on if the underlying file structure has changed
+     *
+     * @return boolean
+     */
     public boolean isReloadRequired() {
         boolean reloadCache = false;
         try {
@@ -198,6 +219,12 @@ public class FilesCache {
         }
         return reloadCache;
     }
+
+    /**
+     * @param filesList
+     * @return List
+     * Returns a deepCopy of the list being sent as param
+     */
 
     private List<String> deepCopy(List<String> filesList) {
         List<String> tempFilesList = new ArrayList<>();

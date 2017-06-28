@@ -1,8 +1,11 @@
 package com.example.textSearchEngine.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by suryansh on 22/6/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchRequest {
     private String searchQuery;
 

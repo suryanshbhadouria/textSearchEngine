@@ -22,6 +22,12 @@ public class SearchServiceImpl implements ISearchService {
     @Autowired
     IFileReadServive fileReadServive;
 
+    /**
+     * @param token
+     * @return SearchResponse
+     * Searches for the token in the invertedIndex
+     */
+
     @Override
     public SearchResponse searchToken(String token) {
         SearchResponse response = null;

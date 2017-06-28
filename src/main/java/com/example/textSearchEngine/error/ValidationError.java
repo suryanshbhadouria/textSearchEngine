@@ -1,5 +1,7 @@
 package com.example.textSearchEngine.error;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by suryansh on 22/6/17.
  */

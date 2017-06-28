@@ -37,6 +37,13 @@ public class SearchApiController {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * API :findwordinfile
+     * Method: GET
+     *
+     * @return SearchResponse
+     * @param: word(required=true)
+     */
 
     @RequestMapping(value = "/findwordinfile", method = RequestMethod.GET)
     @Produces(MediaType.APPLICATION_JSON)
@@ -59,8 +66,11 @@ public class SearchApiController {
     }
 
     /**
+     * API :findwordinfile
+     * Method POST
+     *
      * @param request
-     * @return
+     * @return SearchResponse
      * @throws ParseException
      */
 

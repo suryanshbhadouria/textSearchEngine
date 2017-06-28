@@ -36,6 +36,12 @@ public class InvertedIndex implements IInvertedIndex {
         this.tokenToDocumentNameToLineNumberMap = tokenToDocumentNameToLineNumberMap;
     }
 
+    /**
+     * @param token
+     * @param documentName
+     * @param lineNumber   populates the invertedIndex with the data being sent in a map of token against document against list of lines
+     */
+
     @Override
     public void addToken(String token, String documentName, Long lineNumber) {
         if (tokenToDocumentNameToLineNumberMap != null) {
@@ -58,6 +64,10 @@ public class InvertedIndex implements IInvertedIndex {
         }
     }
 
+    /**
+     * @param token
+     * @param documentName updates the invertedIndex by removing data being for a token present in document given by documentName
+     */
     @Override
     public boolean removeToken(String token, String documentName) {
         boolean removed = false;

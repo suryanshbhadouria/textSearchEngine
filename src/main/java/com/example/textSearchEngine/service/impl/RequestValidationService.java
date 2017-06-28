@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 @Service("requestValidationService")
 public class RequestValidationService implements IRequestValidationService {
 
+    /**
+     * @param request
+     * @return ValidationError
+     * validates the incoming searchRequest ;check if its null or the searchQuery is null
+     */
     @Override
     public ValidationError validateInputRequest(SearchRequest request) throws Exception {
         ValidationError error = null;

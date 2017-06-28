@@ -1,6 +1,7 @@
 package com.example.textSearchEngine.dto.response;
 
 import com.example.textSearchEngine.error.ValidationError;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 /**
  * Created by suryansh on 22/6/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchResponse {
     private ValidationError validationError;
     private Map<String, List<String>> documentToListOfLinesMap;
