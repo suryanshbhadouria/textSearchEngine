@@ -90,4 +90,16 @@ public class InvertedIndex implements IInvertedIndex {
         LOG.info("tokenToDocumentNameToLineNumberMap is empty :{}");
         return removed;
     }
+
+    @Override
+    public void printCache() {
+        if (tokenToDocumentNameToLineNumberMap != null) {
+            for (Map.Entry<String, Map<String, List<Long>>> entry : tokenToDocumentNameToLineNumberMap.entrySet()) {
+                LOG.info("token is:{}", entry.getKey());
+                for (Map.Entry<String, List<Long>> entry1 : entry.getValue().entrySet()) {
+                    LOG.info("Document is:{} and lines are:{}", entry1.getKey(), entry1.getValue());
+                }
+            }
+        }
+    }
 }

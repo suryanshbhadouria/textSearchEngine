@@ -16,4 +16,7 @@ public interface IInvertedIndex {
     public void addToken(String token, String documentName, Long lineNumber);
 
     public boolean removeToken(String token, String documentName);
+
+    public void printCache();
+
 }
