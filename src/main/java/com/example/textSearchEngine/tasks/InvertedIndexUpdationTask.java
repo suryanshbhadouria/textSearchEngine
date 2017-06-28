@@ -30,7 +30,6 @@ public class InvertedIndexUpdationTask {
         if (filesCache.isReloadRequired()) {
             filesCache.reloadCache();
             LOG.info("Time taken to reloadCache:{}", System.currentTimeMillis() - startTime);
-            filesCache.printCache();
         } else {
             LOG.info("Not reloading cache as file structure has not changed");
         }
